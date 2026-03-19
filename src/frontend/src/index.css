@@ -1,0 +1,435 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0rem;
+    --background: 0.1 0 0;
+    --foreground: 0.95 0.01 60;
+    --card: 0.12 0 0;
+    --card-foreground: 0.95 0.01 60;
+    --popover: 0.12 0 0;
+    --popover-foreground: 0.95 0.01 60;
+    --primary: 0.74 0.07 60;
+    --primary-foreground: 0.1 0 0;
+    --secondary: 0.9 0.03 60;
+    --secondary-foreground: 0.2 0.01 40;
+    --muted: 0.18 0 0;
+    --muted-foreground: 0.65 0.02 60;
+    --accent: 0.74 0.07 60;
+    --accent-foreground: 0.1 0 0;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.74 0.07 60;
+    --input: 0.2 0 0;
+    --ring: 0.74 0.07 60;
+    --gold: 0.74 0.07 60;
+    --gold-light: 0.84 0.06 65;
+    --sand: 0.92 0.02 70;
+    --sand-dark: 0.85 0.04 65;
+    --charcoal: 0.1 0 0;
+    --charcoal-light: 0.16 0 0;
+    --off-white: 0.95 0.01 60;
+    --deep-brown: 0.22 0.03 50;
+    --chart-1: 0.646 0.222 41.116;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.398 0.07 227.392;
+    --chart-4: 0.828 0.189 84.429;
+    --chart-5: 0.769 0.188 70.08;
+    --sidebar: 0.1 0 0;
+    --sidebar-foreground: 0.95 0.01 60;
+    --sidebar-primary: 0.74 0.07 60;
+    --sidebar-primary-foreground: 0.1 0 0;
+    --sidebar-accent: 0.18 0 0;
+    --sidebar-accent-foreground: 0.95 0.01 60;
+    --sidebar-border: 0.74 0.07 60;
+    --sidebar-ring: 0.74 0.07 60;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif;
+    cursor: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: "Playfair Display", serif;
+    /* Tighter tracking = more luxury editorial feel */
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+}
+
+/* ─── IMPROVEMENT 1: Editorial eyebrow hairline system ───────────────────────
+   Flanking hairlines on every section eyebrow label.
+   Immediately gives the Vogue/Aveda "magazine spread" anchor feel.
+   Apply .section-eyebrow to every eyebrow <p> tag.
+──────────────────────────────────────────────────────────────────────────── */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: oklch(0.74 0.07 60 / 0.55);
+  flex-shrink: 0;
+}
+
+/* Eyebrow wrapper — centers the inline-flex eyebrow in text-center contexts */
+.eyebrow-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+/* Left-aligned eyebrow (for split layouts) */
+.eyebrow-wrap-left {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+/* Custom cursor */
+.custom-cursor-outer {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid oklch(0.74 0.07 60);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor-inner {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: oklch(0.74 0.07 60);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.1s ease, height 0.1s ease;
+}
+
+.cursor-hover .custom-cursor-outer {
+  width: 56px;
+  height: 56px;
+}
+
+/* Scroll animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 {
+  transition-delay: 0.08s;
+}
+.reveal-delay-2 {
+  transition-delay: 0.16s;
+}
+.reveal-delay-3 {
+  transition-delay: 0.24s;
+}
+.reveal-delay-4 {
+  transition-delay: 0.32s;
+}
+.reveal-delay-5 {
+  transition-delay: 0.40s;
+}
+.reveal-delay-6 {
+  transition-delay: 0.48s;
+}
+
+/* Gold particles */
+@keyframes float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) scale(1.5);
+  }
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: oklch(0.84 0.06 65);
+  animation: float-up linear infinite;
+  pointer-events: none;
+}
+
+/* Glow pulse for headline */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.hero-glow {
+  position: absolute;
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(0.74 0.07 60 / 0.25) 0%,
+    transparent 70%
+  );
+  animation: glow-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* CTA gold pulse */
+@keyframes gold-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.74 0.07 60 / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px 14px oklch(0.74 0.07 60 / 0.25);
+  }
+}
+
+.pulse-gold {
+  animation: gold-pulse 2.5s ease-in-out infinite;
+}
+
+/* WhatsApp pulse */
+@keyframes wa-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(37, 211, 102, 0);
+  }
+}
+
+.wa-btn {
+  animation: wa-pulse 2s ease-in-out infinite;
+}
+
+/* Scroll indicator bounce */
+@keyframes bounce-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+.bounce-down {
+  animation: bounce-down 1.5s ease-in-out infinite;
+}
+
+/* ─── IMPROVEMENT 3: Service card image taller + number overlay ──────────────
+   Cards gain editorial ordinal numbers as a barely-there watermark.
+   Service name shifts to off-white; gold reserved only for the CTA link.
+──────────────────────────────────────────────────────────────────────────── */
+.service-card {
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.service-card:hover {
+  box-shadow: 0 0 40px 6px oklch(0.74 0.07 60 / 0.28);
+  border-color: oklch(0.74 0.07 60) !important;
+}
+
+.service-card-number {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-family: "Playfair Display", serif;
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: oklch(1 0 0 / 0.07);
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+}
+
+/* Before/after slider */
+.before-after-container {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.before-after-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 10;
+}
+
+.slider-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: oklch(0.74 0.07 60);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.slider-handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: oklch(0.74 0.07 60);
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 6;
+  box-shadow: 0 0 20px oklch(0.74 0.07 60 / 0.6);
+}
+
+/* Stylist hover overlay */
+.stylist-card .bio-overlay {
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stylist-card:hover .bio-overlay {
+  transform: translateY(0);
+}
+
+/* Mobile: default cursor */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  .custom-cursor-outer,
+  .custom-cursor-inner {
+    display: none;
+  }
+}
+
+/* Star rating animation */
+@keyframes star-pop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.star-animate span {
+  display: inline-block;
+  animation: star-pop 0.4s ease forwards;
+  opacity: 0;
+}
+
+.star-animate.visible span {
+  opacity: 1;
+}
+.star-animate.visible span:nth-child(1) {
+  animation-delay: 0.00s;
+}
+.star-animate.visible span:nth-child(2) {
+  animation-delay: 0.10s;
+}
+.star-animate.visible span:nth-child(3) {
+  animation-delay: 0.20s;
+}
+.star-animate.visible span:nth-child(4) {
+  animation-delay: 0.30s;
+}
+.star-animate.visible span:nth-child(5) {
+  animation-delay: 0.40s;
+}
+
+/* Membership card hover */
+.membership-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+.membership-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 24px 64px oklch(0.74 0.07 60 / 0.2);
+}
+
+/* Timeline connector */
+.timeline-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  left: calc(50% + 28px);
+  width: calc(100% - 56px);
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    oklch(0.74 0.07 60 / 0.7),
+    oklch(0.74 0.07 60 / 0.15)
+  );
+}
+
+@media (max-width: 768px) {
+  .timeline-step:not(:last-child)::after {
+    display: none;
+  }
+}
